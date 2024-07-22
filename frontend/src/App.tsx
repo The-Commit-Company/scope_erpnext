@@ -1,21 +1,17 @@
 import { useState } from 'react'
 import './App.css'
-import { FrappeProvider } from 'frappe-react-sdk'
+import { FrappeProvider, useFrappeGetDocList } from 'frappe-react-sdk'
 function App() {
 	const [count, setCount] = useState(0)
 
 	return (
 		<div className="App">
-			<FrappeProvider>
+			<FrappeProvider
+				siteName={import.meta.env.VITE_SITE_NAME}
+				socketPort={import.meta.env.VITE_SOCKET_PORT}
+			>
 				<div>
-					<div>
-						{/* <a href="https://vitejs.dev" target="_blank">
-		  <img src="/vite.svg" className="logo" alt="Vite logo" />
-		</a> */}
-						{/* <a href="https://reactjs.org" target="_blank">
-							<img src={reactLogo} className="logo react" alt="React logo" />
-						</a> */}
-					</div>
+					<TestComponent />
 					<h1>Vite + React + Frappe</h1>
 					<div className="card">
 						<button onClick={() => setCount((count) => count + 1)}>
@@ -32,6 +28,12 @@ function App() {
 			</FrappeProvider>
 		</div>
 	)
+}
+
+const TestComponent = () => {
+	const { data } = useFrappeGetDocList('User')
+
+	return <div></div>
 }
 
 export default App
