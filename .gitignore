@@ -5,3 +5,6 @@
 tags
 node_modules
 __pycache__
+
+scope/public/frontend/
+scope/www/scope.html
