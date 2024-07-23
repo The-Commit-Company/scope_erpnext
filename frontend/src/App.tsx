@@ -1,5 +1,8 @@
 import { FrappeProvider } from 'frappe-react-sdk'
-import Login from './pages/Login'
+// import Login from './pages/Login'
+import { Outlet } from 'react-router-dom'
+
+
 function App() {
 
 	return (
@@ -8,7 +11,7 @@ function App() {
 				siteName={import.meta.env.VITE_SITE_NAME}
 				socketPort={import.meta.env.VITE_SOCKET_PORT}
 			>
-				<Login />
+				<Outlet />
 			</FrappeProvider>
 		</div>
 	)
