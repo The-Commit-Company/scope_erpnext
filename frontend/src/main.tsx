@@ -10,6 +10,7 @@ import Projects from './pages/Projects.tsx';
 import Tasks from './pages/Tasks.tsx';
 import Login from './pages/Login.tsx';
 import ProtectedRoute from './ProtectedRoute.tsx';
+import List from './pages/doctype/List.tsx';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
           {
             path: "tasks",
             element: <Tasks />,
+          },
+          {
+            path: ":doctype",
+            element: <List />,
           },
           {
             path: "*",

@@ -11,6 +11,7 @@
     "copy-html-entry": "cp ../scope/public/frontend/index.html ../scope/www/scope.html"
   },
   "dependencies": {
+    "@glideapps/glide-data-grid": "^6.0.3",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
