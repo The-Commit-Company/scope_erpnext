@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select"
 import Pagination from "@/components/common/Pagination/Pagination"
 import CreateProjectButton from "@/components/features/Projects/CreateProjectButton"
+import { ErrorBanner } from "@/components/common/ErrorBanner/ErrorBanner"
 
 
 const Projects = () => {
@@ -37,7 +38,7 @@ const Projects = () => {
 
     }, [status])
 
-    const { data, mutate } = useFrappeGetDocList<Project>('Project', {
+    const { data, mutate, error } = useFrappeGetDocList<Project>('Project', {
         fields: ['name', 'project_name', 'status', 'expected_start_date', 'expected_end_date', 'percent_complete', 'priority'],
         filters: filters,
         limit: 20,
@@ -47,6 +48,7 @@ const Projects = () => {
     useFrappeDocTypeEventListener('Project', () => {
         mutate()
     })
+
 
     return (
         <div className="p-2">
@@ -78,7 +80,7 @@ const Projects = () => {
                     setPageLimitStart={setPageLimitStart}
                 />
             </div>
-
+            <ErrorBanner error={error} />
             <Table>
                 <TableHeader>
                     <TableRow>

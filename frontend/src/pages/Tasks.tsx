@@ -9,16 +9,29 @@ import {
 } from "@/components/ui/select"
 import useDebounce from "@/hooks/useDebounce"
 import { Task } from "@/types/Projects/Task"
-import { useFrappeGetDocList } from "frappe-react-sdk"
+import { Filter, useFrappeGetDocList } from "frappe-react-sdk"
+import { useState } from "react"
 
 const Tasks = () => {
 
     const [subject, setSubject] = useDebounce('')
 
+    const [status, setStatus] = useState('')
+
+    const filters: Filter[] = []
+
+    if (subject) {
+        filters.push(['subject', 'like', `%${subject}%`])
+    }
+
+    if (status) {
+        filters.push(['status', '=', status])
+    }
+
     const { data } = useFrappeGetDocList<Task>('Task', {
         fields: ['name', 'subject', 'status', 'exp_start_date', 'exp_end_date', 'progress', 'priority', '_assign'],
-        filters: [['subject', 'like', `%${subject}%`]],
-    }, ['task_list', subject])
+        filters,
+    }, ['task_list', subject, status])
 
     return (
         <div className="p-2">
@@ -30,9 +43,9 @@ const Tasks = () => {
 
             <div className="flex gap-2 justify-between items-center mb-4">
                 <Input onChange={(e) => setSubject(e.target.value)} placeholder="Search" />
-                {/* <Select
-                // onValueChange={setStatus}
-                // value={status}
+                <Select
+                    onValueChange={setStatus}
+                    value={status}
                 >
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Status" />
@@ -42,7 +55,7 @@ const Tasks = () => {
                         <SelectItem value="Completed">Completed</SelectItem>
                         <SelectItem value="Cancelled">Cancelled</SelectItem>
                     </SelectContent>
-                </Select> */}
+                </Select>
             </div>
             <div>
                 {data?.map((task) => (<TaskRow task={task} key={task.name} />))}

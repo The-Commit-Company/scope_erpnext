@@ -10,13 +10,15 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { useForm } from "react-hook-form"
+import { useFieldArray, useForm, useFormContext } from "react-hook-form"
 import { Project } from "@/types/Projects/Project"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import LinkField from "@/components/common/FormFields/LinkField"
 import { useFrappeCreateDoc } from "frappe-react-sdk"
 import { useState } from "react"
 import { getUserDefault } from "@/lib/defaults"
+import { PlusCircle, Trash } from "lucide-react"
+import { ErrorBanner } from "@/components/common/ErrorBanner/ErrorBanner"
 
 const CreateProjectButton = () => {
 
@@ -53,7 +55,7 @@ const ProjectForm = ({ onClose }: { onClose: VoidFunction }) => {
         }
     })
 
-    const { createDoc, loading } = useFrappeCreateDoc<Project>()
+    const { createDoc, loading, error } = useFrappeCreateDoc<Project>()
 
     const onSubmit = (data: Project) => {
 
@@ -67,6 +69,7 @@ const ProjectForm = ({ onClose }: { onClose: VoidFunction }) => {
     return <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid gap-4 py-4">
+                <ErrorBanner error={error} />
                 <FormField
                     control={form.control}
                     name="project_name"
@@ -117,6 +120,8 @@ const ProjectForm = ({ onClose }: { onClose: VoidFunction }) => {
                         </FormItem>
                     )}
                 />
+
+                <ProjectUserField />
             </div>
             <DialogFooter>
                 <Button type="submit" disabled={loading}>{loading ? "Saving..." : "Save changes"}</Button>
@@ -124,5 +129,35 @@ const ProjectForm = ({ onClose }: { onClose: VoidFunction }) => {
         </form>
     </Form>
 
+
+}
+
+const ProjectUserField = () => {
+
+    const form = useFormContext()
+    const { fields, append, remove } = useFieldArray({
+        name: 'users',
+    })
+
+    return <div>
+        <Button onClick={() => append({ user: '', welcome_email_sent: 1 })} size='sm' variant={'ghost'} type='button'><PlusCircle /></Button>
+        {fields.map((row, index) => (
+            <div key={row.id} className="flex gap-1">
+                <FormField
+                    control={form.control}
+                    name={`users.${index}.user`}
+                    render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                            <LinkField doctype='User' value={field.value} onChange={field.onChange} />
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <Button onClick={() => remove(index)} size='sm' variant={'destructive'} type='button'><Trash /></Button>
+            </div>
+        )
+        )}
+    </div>
 
 }

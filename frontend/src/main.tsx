@@ -8,6 +8,8 @@ import {
 } from "react-router-dom";
 import Projects from './pages/Projects.tsx';
 import Tasks from './pages/Tasks.tsx';
+import Login from './pages/Login.tsx';
+import ProtectedRoute from './ProtectedRoute.tsx';
 
 const router = createBrowserRouter([
   {
@@ -15,13 +17,28 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "projects",
-        element: <Projects />,
+        path: 'login',
+        element: <Login />
       },
       {
-        path: "tasks",
-        element: <Tasks />,
-      }
+        element: <ProtectedRoute />,
+        errorElement: <p>There was an error.</p>,
+        children: [
+          {
+            path: "projects",
+            element: <Projects />,
+          },
+          {
+            path: "tasks",
+            element: <Tasks />,
+          },
+          {
+            path: "*",
+            element: <p>Not Found</p>
+          }
+        ]
+      },
+
     ],
   },
 ], {

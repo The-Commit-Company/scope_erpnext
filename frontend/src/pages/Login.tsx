@@ -10,7 +10,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useFrappeAuth } from "frappe-react-sdk"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const Login = () => {
 
@@ -19,10 +20,17 @@ const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    console.log(currentUser)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (currentUser) {
+            navigate('/projects', {
+                replace: true
+            })
+        }
+    }, [currentUser])
 
     const handleSubmit = () => {
-        console.log(email, password)
         login({
             username: email,
             password: password
